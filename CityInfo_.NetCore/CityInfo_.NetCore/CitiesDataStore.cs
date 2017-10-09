@@ -16,7 +16,22 @@ namespace CityInfo_.NetCore
                 {
                     Id = 1,
                     Name = "New York City",
-                    Description = "Big park at least"
+                    Description = "Big park at least",
+                    PointsOfInterest = new List<PointOfInterestDto>
+                    {
+                        new PointOfInterestDto
+                        {
+                            Id = 1,
+                            Name = "Central Park",
+                            Description = "The most visited urban park in USA"
+                        },
+                        new PointOfInterestDto
+                        {
+                            Id = 2,
+                            Name = "Empire State Building",
+                            Description = "A 102-story skyscrapper located in Midtown Manhattan"
+                        }
+                    }
                 },
                 new CityDto
                 {
