@@ -28,6 +28,8 @@ namespace CityInfo_.NetCore
                 app.UseExceptionHandler();
             }
 
+            app.UseStatusCodePages();
+
             app.UseMvc();
         }
     }
