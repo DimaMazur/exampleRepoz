@@ -4,6 +4,7 @@ using CityInfo_.NetCore.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using CityInfo_.NetCore.Services;
 
 namespace CityInfo_.NetCore.Controllers
 {
@@ -11,18 +12,23 @@ namespace CityInfo_.NetCore.Controllers
     public class PointOfInterestController : Controller
     {
         private readonly ILogger<PointOfInterestDto> _logger;
+        private readonly IMailService _mailService;
 
-        public PointOfInterestController(ILogger<PointOfInterestDto> logger)
+        public PointOfInterestController(IMailService mailService, ILogger<PointOfInterestDto> logger)
         {
             _logger = logger;
+            _mailService = mailService;
         }
 
         [HttpGet("{cityId}/pointsOfInterest")]
         public IActionResult GetPointsOfInterest(int cityId)
         {
+            _mailService.Send("Hey from GET");
 
             try
             {
+
+
                 var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
 
                 if (city == null)
