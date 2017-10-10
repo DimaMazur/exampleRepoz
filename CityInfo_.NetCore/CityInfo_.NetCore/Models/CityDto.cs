@@ -9,6 +9,6 @@ namespace CityInfo_.NetCore.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public int NumberOfPointsOfInterst => PointsOfInterest.Count();
-        public IEnumerable<PointOfInterestDto> PointsOfInterest { get; set; } = new List<PointOfInterestDto>();
+        public IList<PointOfInterestDto> PointsOfInterest { get; set; } = new List<PointOfInterestDto>();
     }
 }
