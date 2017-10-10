@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
+using NLog.Extensions.Logging;
 
 namespace CityInfo_.NetCore
 {
@@ -21,8 +22,11 @@ namespace CityInfo_.NetCore
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            //env.ConfigureNLog("nlog.config");
+
             loggerFactory.AddConsole();
             loggerFactory.AddDebug();
+            loggerFactory.AddNLog();
 
             if (env.IsDevelopment())
             {

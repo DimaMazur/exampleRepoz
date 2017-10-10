@@ -75,7 +75,7 @@ namespace CityInfo_.NetCore.Controllers
 
             if (pointOfInterest.Name == pointOfInterest.Description)
             {
-                ModelState.AddModelError("Description6", "Name can't be the same as description");
+                ModelState.AddModelError("Description", "Name can't be the same as description");
             }
 
             if (!ModelState.IsValid)
