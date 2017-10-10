@@ -1,25 +1,44 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using CityInfo_.NetCore.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace CityInfo_.NetCore.Controllers
 {
     [Route("api/cities")]
     public class PointOfInterestController : Controller
     {
+        private readonly ILogger<PointOfInterestDto> _logger;
+
+        public PointOfInterestController(ILogger<PointOfInterestDto> logger)
+        {
+            _logger = logger;
+        }
+
         [HttpGet("{cityId}/pointsOfInterest")]
         public IActionResult GetPointsOfInterest(int cityId)
         {
-            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
 
-            if (city == null)
+            try
             {
-                return NotFound();
+                var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+
+                if (city == null)
+                {
+                    _logger.LogInformation("City isn't found in DB");
+                    return NotFound();
+                }
+                else
+                {
+                    return Ok(city.PointsOfInterest);
+                }
             }
-            else
+            catch (Exception)
             {
-                return Ok(city.PointsOfInterest);
+                _logger.LogCritical("Exception was occured in Get method in PointOfInterestController");
+                return StatusCode(500, "Smth went wrong in server");
             }
         }
 
