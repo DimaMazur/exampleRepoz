@@ -23,12 +23,10 @@ namespace CityInfo_.NetCore.Controllers
         [HttpGet("{cityId}/pointsOfInterest")]
         public IActionResult GetPointsOfInterest(int cityId)
         {
-            _mailService.Send("Hey from GET");
+            _mailService.Send("==================>>>>>>>>>>>>>>. Hey from GET");
 
             try
             {
-
-
                 var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
 
                 if (city == null)
