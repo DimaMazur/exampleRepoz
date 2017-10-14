@@ -1,7 +1,9 @@
-﻿using CityInfo_.NetCore.Services;
+﻿using CityInfo_.NetCore.Entities;
+using CityInfo_.NetCore.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -36,6 +38,9 @@ namespace CityInfo_.NetCore
 #else
             services.AddTransient<IMailService, ProdactionMailService>();
 #endif
+
+            string connectionString = @"Server=(localdb)\ProjectsV13;Database=CityInfoDB;Trusted_Connection=True;";
+            services.AddDbContext<CityInfoDBContext>(o => o.UseSqlServer(connectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
