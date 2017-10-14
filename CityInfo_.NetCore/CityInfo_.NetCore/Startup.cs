@@ -20,7 +20,8 @@ namespace CityInfo_.NetCore
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("AppSettings.json", false, true)
-                .AddJsonFile($"AppSettings.{env.EnvironmentName}.json", true, true);
+                .AddJsonFile($"AppSettings.{env.EnvironmentName}.json", true, true)
+                .AddEnvironmentVariables();
 
             Configuration = builder.Build();
         }
@@ -39,7 +40,7 @@ namespace CityInfo_.NetCore
             services.AddTransient<IMailService, ProdactionMailService>();
 #endif
 
-            string connectionString = @"Server=(localdb)\ProjectsV13;Database=CityInfoDB;Trusted_Connection=True;";
+            string connectionString = Configuration["dbConnectionString"];
             services.AddDbContext<CityInfoDBContext>(o => o.UseSqlServer(connectionString));
         }
 
