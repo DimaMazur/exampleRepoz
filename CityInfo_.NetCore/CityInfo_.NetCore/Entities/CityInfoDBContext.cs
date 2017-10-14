@@ -6,7 +6,7 @@ namespace CityInfo_.NetCore.Entities
     {
         public CityInfoDBContext(DbContextOptions options) : base(options)
         {
-            Database.EnsureCreated();
+            Database.Migrate();
         }
 
         public DbSet<City> Cities { get; set; }
