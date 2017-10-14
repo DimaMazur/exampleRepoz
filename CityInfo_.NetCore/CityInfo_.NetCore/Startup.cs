@@ -45,7 +45,8 @@ namespace CityInfo_.NetCore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
+            CityInfoDBContext context)
         {
             loggerFactory.AddConsole();
             loggerFactory.AddDebug();
@@ -59,6 +60,8 @@ namespace CityInfo_.NetCore
             {
                 app.UseExceptionHandler();
             }
+
+            context.EnsureSeedDataForCOntext();
 
             app.UseStatusCodePages();
 
