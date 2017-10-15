@@ -1,4 +1,6 @@
-﻿using CityInfo_.NetCore.Entities;
+﻿using AutoMapper;
+using CityInfo_.NetCore.Entities;
+using CityInfo_.NetCore.Models;
 using CityInfo_.NetCore.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -66,6 +68,13 @@ namespace CityInfo_.NetCore
             context.EnsureSeedDataForCOntext();
 
             app.UseStatusCodePages();
+
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<City, CityDto>();
+                config.CreateMap<City, CityWithoutPointsOfInterestDto>();
+                config.CreateMap<PointOfInterest, PointOfInterestDto>();
+            });
 
             app.UseMvc();
         }

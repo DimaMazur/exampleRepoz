@@ -3,6 +3,7 @@ using CityInfo_.NetCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using CityInfo_.NetCore.Services;
 using System.Collections.Generic;
+using AutoMapper;
 
 namespace CityInfo_.NetCore.Controllers
 {
@@ -21,16 +22,7 @@ namespace CityInfo_.NetCore.Controllers
         public IActionResult GetCities()
         {
             var cities = repository.GetCities();
-            var result = new List<CityWithoutPointsOfInterestDto>();
-
-            foreach(var c in cities)
-            {
-                result.Add(new CityWithoutPointsOfInterestDto
-                {
-                    Name = c.Name,
-                    Description = c.Description
-                });
-            }
+            var result = Mapper.Map<IEnumerable<CityWithoutPointsOfInterestDto>>(cities);
 
             return Ok(result);
         }
@@ -47,31 +39,13 @@ namespace CityInfo_.NetCore.Controllers
 
             if (includePointsOfInterest)
             {
-                var result = new CityDto
-                {
-                    Description = city.Description,
-                    Name = city.Name,
-                };
-
-                foreach (var point in city.PointsOfInterest)
-                {
-                    result.PointsOfInterest.Add(
-                        new PointOfInterestDto
-                        {
-                            Description = point.Description,
-                            Name = point.Name
-                        }
-                    );
-                }
-
-                return Ok(result);
+                var cityDto = Mapper.Map<CityDto>(city);
+                return Ok(cityDto);
             }
 
-            return Ok(new CityWithoutPointsOfInterestDto
-            {
-                Name = city.Name,
-                Description = city.Description
-            });
+
+            var cityWithoutPointsOfInterest = Mapper.Map<CityWithoutPointsOfInterestDto>(city);
+            return Ok(cityWithoutPointsOfInterest);
         }
     }
 }
