@@ -8,205 +8,205 @@ using CityInfo_.NetCore.Services;
 
 namespace CityInfo_.NetCore.Controllers
 {
-    [Route("api/cities")]
-    public class PointOfInterestController : Controller
-    {
-        private readonly ILogger<PointOfInterestDto> _logger;
-        private readonly IMailService _mailService;
+//    [Route("api/cities")]
+//    public class PointOfInterestController : Controller
+//    {
+//        private readonly ILogger<PointOfInterestDto> _logger;
+//        private readonly IMailService _mailService;
 
-        public PointOfInterestController(IMailService mailService, ILogger<PointOfInterestDto> logger)
-        {
-            _logger = logger;
-            _mailService = mailService;
-        }
+//        public PointOfInterestController(IMailService mailService, ILogger<PointOfInterestDto> logger)
+//        {
+//            _logger = logger;
+//            _mailService = mailService;
+//        }
 
-        [HttpGet("{cityId}/pointsOfInterest")]
-        public IActionResult GetPointsOfInterest(int cityId)
-        {
-            _mailService.Send("==================>>>>>>>>>>>>>>. Hey from GET");
+//        [HttpGet("{cityId}/pointsOfInterest")]
+//        public IActionResult GetPointsOfInterest(int cityId)
+//        {
+//            _mailService.Send("==================>>>>>>>>>>>>>>. Hey from GET");
 
-            try
-            {
-                var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+//            try
+//            {
+//                var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
 
-                if (city == null)
-                {
-                    _logger.LogInformation("City isn't found in DB");
-                    return NotFound();
-                }
-                else
-                {
-                    return Ok(city.PointsOfInterest);
-                }
-            }
-            catch (Exception)
-            {
-                _logger.LogCritical("Exception was occured in Get method in PointOfInterestController");
-                return StatusCode(500, "Smth went wrong in server");
-            }
-        }
+//                if (city == null)
+//                {
+//                    _logger.LogInformation("City isn't found in DB");
+//                    return NotFound();
+//                }
+//                else
+//                {
+//                    return Ok(city.PointsOfInterest);
+//                }
+//            }
+//            catch (Exception)
+//            {
+//                _logger.LogCritical("Exception was occured in Get method in PointOfInterestController");
+//                return StatusCode(500, "Smth went wrong in server");
+//            }
+//        }
 
-        [HttpGet("{cityId}/pointsOfInterest/{interestId}", Name = "GetPointOfInterest")]
-        public IActionResult Get(int cityId, int interestId)
-        {
-            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+//        [HttpGet("{cityId}/pointsOfInterest/{interestId}", Name = "GetPointOfInterest")]
+//        public IActionResult Get(int cityId, int interestId)
+//        {
+//            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
 
-            if (city == null)
-            {
-                return NotFound();
-            }
+//            if (city == null)
+//            {
+//                return NotFound();
+//            }
 
-            var interest = city.PointsOfInterest.FirstOrDefault(i => i.Id == interestId);
+//            var interest = city.PointsOfInterest.FirstOrDefault(i => i.Id == interestId);
 
-            if (interest == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return Ok(interest);
-            }
-        }
+//            if (interest == null)
+//            {
+//                return NotFound();
+//            }
+//            else
+//            {
+//                return Ok(interest);
+//            }
+//        }
 
-        [HttpPost("{cityId}/pointofinterest")]
-        public IActionResult CreatePointOfInterest(int cityId,
-            [FromBody] PointOfInterestForCreationDto pointOfInterest)
-        {
-            if (pointOfInterest == null)
-            {
-                return BadRequest();
-            }
+//        [HttpPost("{cityId}/pointofinterest")]
+//        public IActionResult CreatePointOfInterest(int cityId,
+//            [FromBody] PointOfInterestForCreationDto pointOfInterest)
+//        {
+//            if (pointOfInterest == null)
+//            {
+//                return BadRequest();
+//            }
 
-            if (pointOfInterest.Name == pointOfInterest.Description)
-            {
-                ModelState.AddModelError("Description", "Name can't be the same as description");
-            }
+//            if (pointOfInterest.Name == pointOfInterest.Description)
+//            {
+//                ModelState.AddModelError("Description", "Name can't be the same as description");
+//            }
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+//            if (!ModelState.IsValid)
+//            {
+//                return BadRequest(ModelState);
+//            }
 
-            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
-            if (city == null)
-            {
-                return NotFound();
-            }
+//            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+//            if (city == null)
+//            {
+//                return NotFound();
+//            }
 
-            int maxPointOfInterestId = CitiesDataStore.Current.Cities
-                .SelectMany(c => c.PointsOfInterest)
-                .Max(p => p.Id);
+//            int maxPointOfInterestId = CitiesDataStore.Current.Cities
+//                .SelectMany(c => c.PointsOfInterest)
+//                .Max(p => p.Id);
 
-            var newPointOfInterest = new PointOfInterestDto
-            {
-                Id = ++maxPointOfInterestId,
-                Description = pointOfInterest.Description,
-                Name = pointOfInterest.Name
-            };
+//            var newPointOfInterest = new PointOfInterestDto
+//            {
+//                Id = ++maxPointOfInterestId,
+//                Description = pointOfInterest.Description,
+//                Name = pointOfInterest.Name
+//            };
 
-            city.PointsOfInterest.Add(newPointOfInterest);
+//            city.PointsOfInterest.Add(newPointOfInterest);
 
-            return CreatedAtRoute("GetPointOfInterest",
-                new { cityId = cityId, interestId = newPointOfInterest.Id },
-                newPointOfInterest);
-        }
+//            return CreatedAtRoute("GetPointOfInterest",
+//                new { cityId = cityId, interestId = newPointOfInterest.Id },
+//                newPointOfInterest);
+//        }
 
-        [HttpPut("{cityId}/pointofinterest/{interestId}")]
-        public IActionResult UpdatePointOfInterest(int cityId, int interestId,
-            [FromBody] PointOfInterestForUpdateDto pointOfInterest)
-        {
-            if (pointOfInterest == null)
-            {
-                return BadRequest();
-            }
+//        [HttpPut("{cityId}/pointofinterest/{interestId}")]
+//        public IActionResult UpdatePointOfInterest(int cityId, int interestId,
+//            [FromBody] PointOfInterestForUpdateDto pointOfInterest)
+//        {
+//            if (pointOfInterest == null)
+//            {
+//                return BadRequest();
+//            }
 
-            if (pointOfInterest.Name == pointOfInterest.Description)
-            {
-                ModelState.AddModelError("Description6", "Name can't be the same as description");
-            }
+//            if (pointOfInterest.Name == pointOfInterest.Description)
+//            {
+//                ModelState.AddModelError("Description6", "Name can't be the same as description");
+//            }
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+//            if (!ModelState.IsValid)
+//            {
+//                return BadRequest(ModelState);
+//            }
 
-            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
-            if (city == null)
-            {
-                return NotFound();
-            }
+//            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+//            if (city == null)
+//            {
+//                return NotFound();
+//            }
 
-            var interestPointToUpdate = city.PointsOfInterest.FirstOrDefault(p => p.Id == interestId);
+//            var interestPointToUpdate = city.PointsOfInterest.FirstOrDefault(p => p.Id == interestId);
 
-            if (interestPointToUpdate == null)
-            {
-                return NotFound();
-            }
+//            if (interestPointToUpdate == null)
+//            {
+//                return NotFound();
+//            }
 
-            interestPointToUpdate.Name = interestPointToUpdate.Name;
-            interestPointToUpdate.Description = interestPointToUpdate.Description;
+//            interestPointToUpdate.Name = interestPointToUpdate.Name;
+//            interestPointToUpdate.Description = interestPointToUpdate.Description;
 
-            return NoContent();
-        }
+//            return NoContent();
+//        }
 
-        [HttpPatch("{cityId}/pointsOfInterest/{interestId}")]
-        public IActionResult PartiallyUpdatePointOfInterest(int cityId, int interestId,
-            [FromBody] JsonPatchDocument<PointOfInterestDto> pathDoc)
-        {
-            if (pathDoc == null)
-            {
-                return BadRequest();
-            }
+//        [HttpPatch("{cityId}/pointsOfInterest/{interestId}")]
+//        public IActionResult PartiallyUpdatePointOfInterest(int cityId, int interestId,
+//            [FromBody] JsonPatchDocument<PointOfInterestDto> pathDoc)
+//        {
+//            if (pathDoc == null)
+//            {
+//                return BadRequest();
+//            }
 
-            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
-            if (city == null)
-            {
-                return NotFound();
-            }
+//            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+//            if (city == null)
+//            {
+//                return NotFound();
+//            }
 
-            var interestFromDb = city.PointsOfInterest.FirstOrDefault(i => i.Id == interestId);
-            if (interestFromDb == null)
-            {
-                return NotFound();
-            }
+//            var interestFromDb = city.PointsOfInterest.FirstOrDefault(i => i.Id == interestId);
+//            if (interestFromDb == null)
+//            {
+//                return NotFound();
+//            }
 
-            var pointOfInterstToPatch = new PointOfInterestDto
-            {
-                Name = interestFromDb.Name,
-                Description = interestFromDb.Description
-            };
+//            var pointOfInterstToPatch = new PointOfInterestDto
+//            {
+//                Name = interestFromDb.Name,
+//                Description = interestFromDb.Description
+//            };
 
-            pathDoc.ApplyTo(pointOfInterstToPatch, ModelState);
+//            pathDoc.ApplyTo(pointOfInterstToPatch, ModelState);
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+//            if (!ModelState.IsValid)
+//            {
+//                return BadRequest(ModelState);
+//            }
 
-            interestFromDb.Description = pointOfInterstToPatch.Description;
-            interestFromDb.Name = pointOfInterstToPatch.Name;
+//            interestFromDb.Description = pointOfInterstToPatch.Description;
+//            interestFromDb.Name = pointOfInterstToPatch.Name;
 
-            return NoContent();
-        }
+//            return NoContent();
+//        }
 
-        [HttpDelete("{cityId}/pointsOfInterest/{interestId}")]
-        public IActionResult DeletePoitOfInterest(int cityId, int interestId)
-        {
-            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
-            if (city == null)
-            {
-                return NotFound();
-            }
+//        [HttpDelete("{cityId}/pointsOfInterest/{interestId}")]
+//        public IActionResult DeletePoitOfInterest(int cityId, int interestId)
+//        {
+//            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+//            if (city == null)
+//            {
+//                return NotFound();
+//            }
 
-            var interest = city.PointsOfInterest.FirstOrDefault(i => i.Id == interestId);
-            if (interest == null)
-            {
-                return NotFound();
-            }
+//            var interest = city.PointsOfInterest.FirstOrDefault(i => i.Id == interestId);
+//            if (interest == null)
+//            {
+//                return NotFound();
+//            }
 
-            city.PointsOfInterest.Remove(interest);
+//            city.PointsOfInterest.Remove(interest);
 
-            return NoContent();
-        }
-    }
+//            return NoContent();
+//        }
+//    }
 }

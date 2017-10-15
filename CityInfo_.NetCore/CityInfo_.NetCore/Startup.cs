@@ -40,6 +40,8 @@ namespace CityInfo_.NetCore
             services.AddTransient<IMailService, ProdactionMailService>();
 #endif
 
+            services.AddScoped<ICityInfoRepository, CityInfoRepository>();
+
             string connectionString = Configuration["dbConnectionString"];
             services.AddDbContext<CityInfoDBContext>(o => o.UseSqlServer(connectionString));
         }
