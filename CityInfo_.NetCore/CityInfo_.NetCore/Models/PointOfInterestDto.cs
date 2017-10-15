@@ -4,12 +4,13 @@ namespace CityInfo_.NetCore.Models
 {
     public class PointOfInterestDto
     {
+        [Required]
         public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
 
-        [System.ComponentModel.DataAnnotations.EmailAddress]
+        [EmailAddress]
         public string Description { get; set; }
     }
 }

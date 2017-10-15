@@ -6,7 +6,7 @@ namespace CityInfo_.NetCore.Entities
 {
     public static class CityInfoDBContextExtensions
     {
-        public static void EnsureSeedDataForCOntext(this CityInfoDBContext context)
+        public static void EnsureSeedDataForContext(this CityInfoDBContext context)
         {
             if (context.Cities.Any())
             {

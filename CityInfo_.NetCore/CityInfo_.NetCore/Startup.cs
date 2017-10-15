@@ -65,7 +65,7 @@ namespace CityInfo_.NetCore
                 app.UseExceptionHandler();
             }
 
-            context.EnsureSeedDataForCOntext();
+            context.EnsureSeedDataForContext();
 
             app.UseStatusCodePages();
 
@@ -74,6 +74,8 @@ namespace CityInfo_.NetCore
                 config.CreateMap<City, CityDto>();
                 config.CreateMap<City, CityWithoutPointsOfInterestDto>();
                 config.CreateMap<PointOfInterest, PointOfInterestDto>();
+                config.CreateMap<PointOfInterestForCreationDto, PointOfInterest>();
+                config.CreateMap<PointOfInterest, PointOfInterestForCreationDto>();
             });
 
             app.UseMvc();
